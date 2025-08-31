@@ -1,0 +1,2771 @@
+Skip to main content
+Google Classroom
+Classroom
+BCA II(2082)
+Announcement
+Jhalnath Chapagain
+•
+8:44 AM
+Practice yourself!
+
+QuizCPP.html
+HTML
+Class comments
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ OOP Quiz</title>
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            font-size: 0.95rem; /* Slightly reduced base font size */
+        }
+        #quiz-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            max-width: 700px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .question-title {
+            font-size: 1.35rem; /* Reduced from 1.5rem */
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .answer-option {
+            display: flex;
+            align-items: center;
+            padding: 12px; /* Slightly reduced padding */
+            border-radius: 8px;
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            margin-bottom: 8px; /* Slightly reduced margin */
+        }
+        .answer-option:hover {
+            background-color: #edf2f7;
+            border-color: #cbd5e0;
+        }
+        .answer-option.selected {
+            background-color: #dbeafe; /* Blue-100 */
+            border-color: #93c5fd; /* Blue-300 */
+        }
+        .answer-option.correct {
+            background-color: #d1fae5; /* Green-100 */
+            border-color: #6ee7b7; /* Green-300 */
+        }
+        .answer-option.incorrect {
+            background-color: #fee2e2; /* Red-100 */
+            border-color: #fca5a5; /* Red-300 */
+        }
+        .answer-option input[type="radio"] {
+            margin-right: 12px; /* Slightly reduced margin */
+            width: 1.15rem; /* Adjusted radio button size */
+            height: 1.15rem; /* Adjusted radio button size */
+        }
+        .answer-option label { /* Targeting the label for specific font size adjustment */
+            font-size: 1rem; /* Reduced from 1.125rem (text-lg) */
+            flex-grow: 1;
+            color: #4a5568; /* Slightly darker grey for better contrast with smaller font */
+        }
+        .feedback-message {
+            margin-top: 12px; /* Slightly reduced margin */
+            padding: 8px 12px; /* Slightly reduced padding */
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            font-size: 0.9rem; /* Reduced font size for feedback */
+        }
+        .feedback-correct {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        .feedback-incorrect {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px; /* Slightly reduced margin */
+        }
+        .navigation-buttons button {
+            padding: 10px 20px; /* Slightly reduced padding */
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: none;
+            font-size: 0.95rem; /* Adjusted button font size */
+        }
+        .navigation-buttons button:hover {
+            transform: translateY(-2px);
+        }
+        .navigation-buttons button:active {
+            transform: translateY(0);
+        }
+        #next-button, #submit-button, #restart-button {
+            background-color: #4f46e5; /* Indigo-600 */
+            color: #ffffff;
+        }
+        #next-button:hover, #submit-button:hover, #restart-button:hover {
+            background-color: #4338ca; /* Indigo-700 */
+        }
+        #back-button {
+            background-color: #e0e7ff; /* Indigo-100 */
+            color: #4f46e5; /* Indigo-600 */
+        }
+        #back-button:hover {
+            background-color: #c7d2fe; /* Indigo-200 */
+        }
+        #result-screen {
+            text-align: center;
+            display: none;
+            flex-direction: column;
+            gap: 15px; /* Slightly reduced gap */
+        }
+        #result-screen h2 {
+            font-size: 1.8rem; /* Reduced from 2rem */
+            font-weight: 700;
+            color: #333;
+        }
+        #result-screen p {
+            font-size: 1.1rem; /* Reduced from 1.25rem */
+            color: #555;
+        }
+        #progress-bar-container {
+            width: 100%;
+            background-color: #e0e7ff;
+            border-radius: 5px;
+            overflow: hidden;
+            height: 8px; /* Slightly reduced height */
+            margin-bottom: 15px; /* Slightly reduced margin */
+        }
+        #progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: #4f46e5;
+            border-radius: 5px;
+            transition: width 0.3s ease-in-out;
+        }
+        #loading-indicator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px; /* Adjusted min-height */
+            font-size: 1.1rem; /* Reduced font size */
+            color: #666;
+        }
+        /* Styling for question code snippets */
+        pre {
+            background-color: #e2e8f0; /* Gray-200 */
+            padding: 12px; /* Slightly reduced padding */
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            font-family: 'Fira Code', 'JetBrains Mono', monospace; /* Monospaced font */
+            font-size: 0.85em; /* Slightly reduced font size */
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div id="quiz-container">
+        <div id="loading-indicator" class="text-indigo-600">Loading Quiz...</div>
+
+        <div id="quiz-content" style="display: none;">
+            <div id="progress-bar-container">
+                <div id="progress-bar"></div>
+            </div>
+            <p class="text-sm text-gray-500 mb-2">Question <span id="current-question-number">1</span> of <span id="total-questions"></span></p>
+            <h2 id="question-text" class="question-title"></h2>
+            <div id="answer-options" class="flex flex-col gap-3">
+                <!-- Answer options will be dynamically loaded here -->
+            </div>
+            <div id="feedback-area"></div>
+            <div class="navigation-buttons">
+                <button id="back-button" class="disabled:opacity-50 disabled:cursor-not-allowed">Back</button>
+                <button id="next-button">Next</button>
+            </div>
+        </div>
+
+        <div id="result-screen">
+            <h2>Quiz Completed! 🎉</h2>
+            <p>You scored <span id="score">0</span> out of <span id="total-score">0</span></p>
+            <button id="restart-button">Restart Quiz</button>
+        </div>
+    </div>
+
+    <script>
+        const quizData = {
+          "questions": [
+            {
+              "question": "What is the primary difference between procedural programming and object-oriented programming (OOP) in terms of data handling?",
+              "answerOptions": [
+                {
+                  "text": "Procedural programming focuses on functions, while OOP focuses on data.",
+                  "rationale": "This option correctly identifies the core difference: procedural programming is function-centric, whereas OOP organizes code around data and the objects that operate on that data.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "OOP uses global variables more than procedural programming.",
+                  "rationale": "This is incorrect. OOP, with its use of access specifiers and classes, is designed to encapsulate data and reduce the reliance on global variables.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Procedural programming handles data through objects, while OOP uses functions.",
+                  "rationale": "This statement inverts the actual roles of the two paradigms. Procedural programming is function-based, and OOP is object-based.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Both paradigms handle data in the same way, but their syntax is different.",
+                  "rationale": "This is incorrect. The fundamental approach to data organization and handling is a key distinction between these two programming paradigms.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "Think about how each paradigm structures a program around either functions or data."
+            },
+            {
+              "question": "Which of the following is NOT a characteristic of object-oriented languages?",
+              "answerOptions": [
+                {
+                  "text": "Polymorphism",
+                  "rationale": "Polymorphism is a core characteristic of OOP, allowing objects of different classes to be treated as objects of a common base class.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Inheritance",
+                  "rationale": "Inheritance is a key characteristic of OOP, enabling the creation of new classes from existing ones.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Procedural Abstraction",
+                  "rationale": "Procedural abstraction is a feature of procedural languages, not a primary characteristic of object-oriented languages.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "Encapsulation",
+                  "rationale": "Encapsulation, which bundles data and methods that operate on the data, is a fundamental characteristic of OOP.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "Consider the key principles of OOP that you have learned about."
+            },
+            {
+              "question": "In C++, which operator is used for dynamic memory allocation?",
+              "answerOptions": [
+                {
+                  "text": "alloc",
+                  "rationale": "The `alloc` function is not a standard C++ operator for dynamic memory allocation.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "new",
+                  "rationale": "The `new` operator is used to allocate memory on the heap for an object and returns a pointer to the newly allocated memory.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "malloc",
+                  "rationale": "The `malloc` function is part of the C standard library, not a native C++ operator, and is generally not preferred for object allocation in C++.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "reserve",
+                  "rationale": "The `reserve` function is used with container classes like `std::vector` to pre-allocate memory, but it does not perform general dynamic memory allocation.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "This operator is paired with the `delete` operator for freeing memory."
+            },
+            {
+              "question": "What is the purpose of the `this` pointer in a C++ member function?",
+              "answerOptions": [
+                {
+                  "text": "It points to the base class of the object.",
+                  "rationale": "The `this` pointer points to the current object, not the base class.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "It is used to access static members of the class.",
+                  "rationale": "Static members belong to the class itself, not a specific object, so the `this` pointer is not used to access them.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "It is a pointer to the function that called the member function.",
+                  "rationale": "The `this` pointer does not track the call stack; it points to the instance of the object.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "It holds the address of the current object.",
+                  "rationale": "The `this` pointer is an implicit parameter to every non-static member function, and its value is the address of the object for which the function is called.",
+                  "isCorrect": true
+                }
+              ],
+              "hint": "Consider which object is currently executing the member function's code."
+            },
+            {
+              "question": "Which access specifier allows members of a base class to be accessed by derived classes but not by external code?",
+              "answerOptions": [
+                {
+                  "text": "public",
+                  "rationale": "`public` members are accessible from anywhere, including outside the class hierarchy.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "private",
+                  "rationale": "`private` members are only accessible from within the class itself and are not inherited by derived classes.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "protected",
+                  "rationale": "`protected` members are accessible from within their own class and by the members and friends of any derived class, but not by external code.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "internal",
+                  "rationale": "`internal` is not a standard C++ access specifier.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "This access specifier is a compromise between public and private access."
+            },
+            {
+              "question": "What is the purpose of an inline function?",
+              "answerOptions": [
+                {
+                  "text": "To make the function's code directly visible to all parts of the program.",
+                  "rationale": "Making the code visible is not the purpose of an inline function; the compiler may or may not choose to inline it to reduce function call overhead.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To ensure the function is always placed in a separate memory segment.",
+                  "rationale": "This is incorrect. The purpose of inlining is to place the code directly at the call site, not in a separate segment."
+                },
+                {
+                  "text": "To suggest to the compiler that the function call should be replaced with the function's body.",
+                  "rationale": "An `inline` function is a hint to the compiler to replace the function call with the actual function code at compile time, which can improve performance by eliminating function call overhead.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "To allow a function to have multiple definitions with the same name.",
+                  "rationale": "This describes function overloading, not inline functions."
+                }
+              ],
+              "hint": "Consider how the compiler treats an `inline` function during compilation and what benefit this provides."
+            },
+            {
+              "question": "How does a copy constructor differ from a parameterized constructor?",
+              "answerOptions": [
+                {
+                  "text": "A copy constructor has no arguments, while a parameterized constructor has at least one argument.",
+                  "rationale": "A copy constructor takes a single argument, which is a reference to an object of the same class. A default constructor takes no arguments.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A copy constructor initializes an object using another object of the same class, while a parameterized constructor initializes with provided values.",
+                  "rationale": "This correctly distinguishes the two. A copy constructor creates a new object as a copy of an existing one, while a parameterized constructor uses specific values passed as arguments.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "A parameterized constructor is only used for static members, while a copy constructor is for non-static members.",
+                  "rationale": "Constructors are used for initializing objects, regardless of whether they have static members.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A copy constructor is implicitly called, while a parameterized constructor must be called explicitly.",
+                  "rationale": "Both types of constructors can be called implicitly or explicitly depending on the context of object creation.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "Focus on the type of argument each constructor takes and what its primary purpose is."
+            },
+            {
+              "question": "What is a 'friend function' in C++?",
+              "answerOptions": [
+                {
+                  "text": "A function that is a member of another class but can be called from the current class.",
+                  "rationale": "Friend functions are not members of the class they are friends with; they are external to the class.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A function that can access private and protected members of a class even though it is not a member of that class.",
+                  "rationale": "A friend function is a non-member function that is given special access rights to a class's private and protected members.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "A function that can only be called by objects of the class it is a friend of.",
+                  "rationale": "This is incorrect. A friend function can be called from anywhere, but it can access the private/protected members of the class it is a friend of.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A function that automatically becomes a member of a class when it is declared.",
+                  "rationale": "Friend functions are not members of the class they are friends with.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "Think about the special access privilege granted to a 'friend' function."
+            },
+            {
+              "question": "Which of the following is an example of a binary operator that can be overloaded?",
+              "answerOptions": [
+                {
+                  "text": "The prefix increment operator ($++$).",
+                  "rationale": "The prefix increment operator is a unary operator, as it operates on a single operand.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "The dereference operator ($*$).",
+                  "rationale": "The dereference operator is a unary operator, as it operates on a single operand (the pointer).",
+                  "isCorrect": false
+                },
+                {
+                  "text": "The addition operator ($+$).",
+                  "rationale": "The addition operator is a binary operator, as it operates on two operands (e.g., $a+b$). Binary operators can be overloaded.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "The logical NOT operator ($!$).",
+                  "rationale": "The logical NOT operator is a unary operator, as it operates on a single operand.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "Consider which operators work with a single operand versus two operands."
+            },
+            {
+              "question": "What is the purpose of a virtual base class in multiple inheritance?",
+              "answerOptions": [
+                {
+                  "text": "To ensure that a derived class can only inherit from one base class.",
+                  "rationale": "This is incorrect. A virtual base class is used in multiple inheritance where a derived class inherits from two or more base classes.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To prevent ambiguity when a derived class inherits multiple times from the same base class.",
+                  "rationale": "A virtual base class is used to solve the 'diamond problem' in multiple inheritance, ensuring that a shared base class is inherited only once by the final derived class.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "To make all members of the base class private.",
+                  "rationale": "A virtual base class does not change the access specifiers of the inherited members.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To allow a derived class to override all functions of the base class.",
+                  "rationale": "This describes the purpose of virtual functions and polymorphism, not virtual base classes.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "Think about the diamond inheritance problem and how to avoid having multiple copies of the same base class."
+            },
+            {
+              "question": "What is the main benefit of using a pure virtual function?",
+              "answerOptions": [
+                {
+                  "text": "It allows a function to be defined in the base class and then redefined in a derived class.",
+                  "rationale": "This describes a regular virtual function, not a pure virtual function.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "It makes the base class an abstract base class, which cannot be instantiated.",
+                  "rationale": "Declaring a pure virtual function makes a class an abstract base class. This means you cannot create objects of that class directly, enforcing that derived classes must provide an implementation for the function.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "It ensures that the function is always called using early binding.",
+                  "rationale": "Pure virtual functions are a core concept of late binding (runtime polymorphism).",
+                  "isCorrect": false
+                },
+                {
+                  "text": "It prevents a derived class from overriding the function.",
+                  "rationale": "This is the opposite of the purpose of pure virtual functions, which is to enforce that derived classes must provide an implementation.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "Consider what happens to a class when it contains at least one pure virtual function."
+            },
+            {
+              "question": "What is the key difference between early and late binding in C++?",
+              "answerOptions": [
+                {
+                  "text": "Early binding occurs at runtime, while late binding occurs at compile time.",
+                  "rationale": "This is incorrect. Early binding happens at compile time, and late binding happens at runtime.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Early binding uses pointers, while late binding uses object references.",
+                  "rationale": "Both types of binding can use pointers or references; the mechanism is not tied to the specific type of variable.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Early binding determines the function to call at compile time, while late binding determines it at runtime.",
+                  "rationale": "Early binding resolves function calls at compile time (e.g., for non-virtual functions), while late binding uses the object's V-table at runtime to determine the correct function to call (e.g., for virtual functions).",
+                  "isCorrect": true
+                },
+                {
+                  "text": "Late binding is only possible in single inheritance, while early binding works with any type of inheritance.",
+                  "rationale": "Late binding, enabled by virtual functions, is a core concept in polymorphism and works with all types of inheritance.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "Think about when the decision is made about which version of a function to call."
+            },
+            {
+              "question": "Which C++ stream class is used for file input operations?",
+              "answerOptions": [
+                {
+                  "text": "$ofstream$",
+                  "rationale": "`ofstream` is used for file output operations (writing to a file).",
+                  "isCorrect": false
+                },
+                {
+                  "text": "$fstream$",
+                  "rationale": "`fstream` is a general-purpose class that can be used for both file input and output, but it is not the one specifically for input.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "$istream$",
+                  "rationale": "`istream` is the base class for input streams in general, but for file input, a more specific class is used.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "$ifstream$",
+                  "rationale": "`ifstream` is the dedicated stream class for file input operations (reading from a file).",
+                  "isCorrect": true
+                }
+              ],
+              "hint": "The name of the class is a combination of 'i' for input and 'fstream' for file stream."
+            },
+            {
+              "question": "What is the purpose of the `open()` function for file streams?",
+              "answerOptions": [
+                {
+                  "text": "To close a file that has been opened.",
+                  "rationale": "The `close()` function is used to close a file, not `open()`.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To create a new file stream object in memory.",
+                  "rationale": "The file stream object is created using its constructor; the `open()` function is a member function that associates it with a physical file.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To associate a file stream object with a physical file on the disk.",
+                  "rationale": "The `open()` function is used to link a file stream object (like `ifstream` or `ofstream`) to a specific file on the file system.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "To read data from a file into a variable.",
+                  "rationale": "Reading data is done using the extraction operator ($>>$) or functions like `read()` and `getline()`.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "This function performs the initial connection between your program's file object and the file itself."
+            },
+            {
+              "question": "What is a function template?",
+              "answerOptions": [
+                {
+                  "text": "A function that can be used only with integer types.",
+                  "rationale": "Function templates are designed to be generic and work with any data type, not just integers.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A function that generates multiple copies of itself at runtime.",
+                  "rationale": "Function templates are instantiated at compile time, not runtime.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A blueprint or formula for creating a generic function that works with any data type.",
+                  "rationale": "A function template allows you to write a single function that can operate on different data types without requiring separate overloads for each type.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "A function that is only used for sorting data.",
+                  "rationale": "While templates are commonly used in algorithms like sorting (e.g., in the Standard Template Library), their purpose is not limited to this task.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "This is a feature that allows you to write code that is independent of the specific data types it operates on."
+            },
+            {
+              "question": "Which of the following is NOT part of the basic C++ exception handling model?",
+              "answerOptions": [
+                {
+                  "text": "$try$",
+                  "rationale": "The `try` block is used to enclose code that might throw an exception.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "$catch$",
+                  "rationale": "The `catch` block is used to handle an exception that has been thrown.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "$throw$",
+                  "rationale": "The `throw` keyword is used to signal that an exception has occurred.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "$handle$",
+                  "rationale": "`handle` is not a keyword in the C++ exception handling model.",
+                  "isCorrect": true
+                }
+              ],
+              "hint": "The exception handling model consists of three keywords to manage errors."
+            },
+            {
+              "question": "What is the main purpose of a `namespace` in C++?",
+              "answerOptions": [
+                {
+                  "text": "To allow the creation of multiple functions with the same name.",
+                  "rationale": "This is achieved through function overloading, not namespaces.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To prevent name collisions between different libraries or parts of a program.",
+                  "rationale": "A namespace creates a new scope, allowing you to group related declarations and definitions, thus preventing name conflicts with code in other namespaces.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "To make all classes and functions public by default.",
+                  "rationale": "Namespaces do not change the default access specifiers of classes or functions.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To define a set of constant values that can be used globally.",
+                  "rationale": "Constants can be defined within a namespace, but this is not the primary purpose of a namespace."
+                }
+              ],
+              "hint": "Think about how you can group related code and avoid clashes with other code, particularly when using large libraries."
+            },
+            {
+              "question": "What happens when an exception is thrown inside a `try` block but there is no matching `catch` block?",
+              "answerOptions": [
+                {
+                  "text": "The program continues to execute normally.",
+                  "rationale": "This is incorrect. The program will not continue to execute normally if an unhandled exception is thrown.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "The `catch` blocks of the outer scopes are searched for a handler.",
+                  "rationale": "When an exception is thrown, the runtime searches for a matching `catch` handler by unwinding the call stack until one is found.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "The program automatically restarts from the beginning of the `try` block.",
+                  "rationale": "This is incorrect. A thrown exception does not cause the program to restart.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "The exception is ignored, and the program exits with a success code.",
+                  "rationale": "This is incorrect. An unhandled exception will cause the program to terminate with an error.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "Consider what the C++ runtime environment does when an exception is thrown but no immediate handler is available."
+            },
+            {
+              "question": "What is the output of the following C++ code snippet?\n```cpp\n#include <iostream>\nusing namespace std;\nvoid myFunction(int& x) {\n  x = 20;\n}\nint main() {\n  int a = 10;\n  myFunction(a);\n  cout << a;\n  return 0;\n}\n```",
+              "answerOptions": [
+                {
+                  "text": "10",
+                  "rationale": "This would be the output if the variable `a` was passed by value and a copy was modified inside the function.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "20",
+                  "rationale": "The variable `a` is passed by reference to `myFunction`, which modifies the original variable `a` to `20`.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "Error",
+                  "rationale": "The code is syntactically correct and will compile and run without an error.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Undefined behavior",
+                  "rationale": "The behavior of this code is well-defined. The variable `a` is passed by reference, so the change is reflected in `main`.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "Pay attention to how the variable `a` is passed to `myFunction`."
+            },
+            {
+              "question": "What is the difference between a `struct` and a `class` in C++?",
+              "answerOptions": [
+                {
+                  "text": "A `struct` can have member functions, but a `class` cannot.",
+                  "rationale": "Both `structs` and `classes` can have member functions.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Members of a `class` are public by default, while members of a `struct` are private by default.",
+                  "rationale": "This is incorrect. Members of a `struct` are public by default, and members of a `class` are private by default.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Members of a `struct` are public by default, while members of a `class` are private by default.",
+                  "rationale": "The primary difference is the default access specifier. Members of a `struct` are `public` by default, whereas members of a `class` are `private` by default.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "A `class` is used for value types, while a `struct` is used for reference types.",
+                  "rationale": "This is incorrect. In C++, both `struct` and `class` are value types. This distinction is more relevant in other languages like C#.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "Focus on the default access specifier for members in each type."
+            },
+            {
+              "question": "What is function overloading?",
+              "answerOptions": [
+                {
+                  "text": "Using a single function name to perform the same operation on different data types.",
+                  "rationale": "This statement describes the core concept of function overloading, where functions with the same name can have different parameter lists.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "A feature that allows a function to be called with more or fewer arguments than it was defined with.",
+                  "rationale": "This is incorrect. This behavior would lead to a compilation error.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Creating multiple functions that each call each other in a loop.",
+                  "rationale": "This describes recursion, not function overloading.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Defining a function to work with different classes in an inheritance hierarchy.",
+                  "rationale": "This describes polymorphism, not function overloading."
+                }
+              ],
+              "hint": "Think about how you can have multiple functions with the same name in a single scope."
+            },
+            {
+              "question": "Which type of inheritance can lead to the 'diamond problem'?",
+              "answerOptions": [
+                {
+                  "text": "Single inheritance",
+                  "rationale": "Single inheritance involves inheriting from only one base class and does not lead to this problem.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Multiple inheritance",
+                  "rationale": "Multiple inheritance, where a class inherits from two or more base classes, can lead to ambiguity and the 'diamond problem' if those base classes share a common grandparent class.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "Hierarchical inheritance",
+                  "rationale": "Hierarchical inheritance involves a single base class with multiple derived classes and does not lead to this problem.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Hybrid inheritance",
+                  "rationale": "Hybrid inheritance is a combination of different types of inheritance, but the 'diamond problem' is specifically associated with the multiple inheritance component.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "The 'diamond problem' occurs when a class inherits from two classes that both inherit from the same base class."
+            },
+            {
+              "question": "What is the purpose of a destructor in a C++ class?",
+              "answerOptions": [
+                {
+                  "text": "To create a new object of the class.",
+                  "rationale": "Constructors are used to create objects, not destructors.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To deallocate memory and perform cleanup operations when an object is destroyed.",
+                  "rationale": "A destructor is a special member function that is automatically called when an object goes out of scope or is explicitly deleted, allowing for cleanup, such as freeing dynamically allocated memory.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "To initialize the data members of the class.",
+                  "rationale": "Initializations are performed by constructors, not destructors.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To prevent other classes from inheriting from the current class.",
+                  "rationale": "The purpose of a destructor is cleanup, not to restrict inheritance.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "Think about the lifecycle of an object and what happens when it is no longer needed."
+            },
+            {
+              "question": "Which type of constructor is called when an object is initialized with an existing object of the same class?",
+              "answerOptions": [
+                {
+                  "text": "Parameterized constructor",
+                  "rationale": "A parameterized constructor is used for initialization with provided values, not with an existing object.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Default constructor",
+                  "rationale": "A default constructor is called when no arguments are provided to the constructor.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Copy constructor",
+                  "rationale": "A copy constructor is specifically designed to initialize a new object as a copy of an existing object.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "Overloaded constructor",
+                  "rationale": "An overloaded constructor is a generic term for constructors with different parameter lists; the specific type for copying is a copy constructor.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "Think about the process of making a copy of an object."
+            },
+            {
+              "question": "What is the correct way to declare an abstract base class in C++?",
+              "answerOptions": [
+                {
+                  "text": "By making the class a `template` class.",
+                  "rationale": "A template class is for creating generic classes, not abstract ones.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "By declaring at least one pure virtual function.",
+                  "rationale": "A class becomes an abstract base class as soon as it contains at least one pure virtual function.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "By using the `abstract` keyword before the class name.",
+                  "rationale": "C++ does not have an `abstract` keyword for classes; abstractness is determined by the presence of pure virtual functions.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "By making the constructor `private`.","rationale": "Making the constructor private would prevent the class from being instantiated, but it does not make it an abstract class in the OOP sense.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "The concept of 'abstractness' is tied directly to a special type of member function."
+            },
+            {
+              "question": "Which C++ feature is used to handle runtime errors and abnormal conditions gracefully?",
+              "answerOptions": [
+                {
+                  "text": "Pointers",
+                  "rationale": "Pointers are used for memory management and access, not for handling errors.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Exception handling",
+                  "rationale": "Exception handling is the C++ mechanism that provides a structured way to separate error-handling code from the normal program flow.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "Namespaces",
+                  "rationale": "Namespaces are used to prevent name conflicts, not for error handling.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Inheritance",
+                  "rationale": "Inheritance is a key concept of OOP for code reuse, not for error handling.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "This feature uses `try`, `throw`, and `catch`."
+            },
+            {
+              "question": "What is the purpose of the `Standard Template Library` (STL) in C++?",
+              "answerOptions": [
+                {
+                  "text": "To provide a set of pre-defined functions for input and output operations.",
+                  "rationale": "The `iostream` library handles input/output operations, while the STL provides containers and algorithms.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To provide a set of generic classes and functions for common programming tasks.",
+                  "rationale": "The STL is a collection of template classes and functions that provide common data structures (containers), algorithms, and iterators.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "To handle exceptions and runtime errors.",
+                  "rationale": "Exception handling is a language feature, not part of the STL.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To create new programming languages based on C++.",
+                  "rationale": "The STL is a library for C++, not a tool for creating new languages."
+                }
+              ],
+              "hint": "Think about the data structures and algorithms that are commonly used in programming and how C++ makes them generic."
+            },
+            {
+              "question": "What is the purpose of the `static` keyword for a data member of a class?",
+              "answerOptions": [
+                {
+                  "text": "It makes the data member accessible only within the class where it is declared.",
+                  "rationale": "This describes the `private` access specifier.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "It makes the data member a constant that cannot be changed.",
+                  "rationale": "The `const` keyword is used to make a data member a constant.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "It ensures that the data member is accessible from outside the class.",
+                  "rationale": "This describes the `public` access specifier.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "It makes the data member shared among all objects of the class.",
+                  "rationale": "A `static` data member is a single copy shared by all objects of the class, rather than each object having its own copy.",
+                  "isCorrect": true
+                }
+              ],
+              "hint": "This keyword is used for members that are tied to the class itself rather than to an individual object."
+            },
+            {
+              "question": "Which of the following describes a key benefit of operator overloading?",
+              "answerOptions": [
+                {
+                  "text": "It makes a program run faster by optimizing operator calls.",
+                  "rationale": "The primary purpose is not performance optimization but rather providing a more intuitive syntax.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "It allows a single operator to be used with objects of different types.",
+                  "rationale": "Operator overloading allows you to redefine how an operator works for user-defined types, enabling a more natural and readable syntax.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "It automatically converts data types from one to another.",
+                  "rationale": "This is incorrect. Type conversions are handled separately and are not the purpose of operator overloading.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "It restricts an operator to be used only with a specific class.",
+                  "rationale": "The purpose of overloading is to extend the use of an operator, not to restrict it."
+                }
+              ],
+              "hint": "Think about how it improves the readability and usability of code for user-defined data types."
+            },
+            {
+              "question": "What is the process of converting a basic data type (e.g., `int`) to a user-defined class type (e.g., `MyClass`)?",
+              "answerOptions": [
+                {
+                  "text": "Type casting",
+                  "rationale": "Type casting is a general term for converting one data type to another, but a more specific term exists for this particular conversion.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Conversion using a parameterized constructor",
+                  "rationale": "A single-argument parameterized constructor can be used to convert a basic type to a class type.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "Operator overloading with a member function",
+                  "rationale": "This is incorrect. Conversion from a basic type to a class type is done using a constructor.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Conversion using a casting operator",
+                  "rationale": "A casting operator is used for conversion from a class type to a basic type.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "Think about how you would initialize an object of your class with a value of a basic data type."
+            },
+            {
+              "question": "What is the concept of a `virtual` function?",
+              "answerOptions": [
+                {
+                  "text": "A function that is automatically inherited by all derived classes.",
+                  "rationale": "All non-static member functions are inherited by derived classes; the `virtual` keyword provides a specific behavior for inheritance.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A function that cannot be overridden by a derived class.",
+                  "rationale": "A virtual function is designed to be overridden by a derived class.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A function that allows for late binding, enabling polymorphism.",
+                  "rationale": "Marking a function as `virtual` enables late binding, allowing the correct overridden version of the function to be called at runtime based on the object's actual type, not the pointer type.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "A function that is a pure function with no side effects.",
+                  "rationale": "This is a concept from functional programming; it is not related to C++ virtual functions."
+                }
+              ],
+              "hint": "This concept is a cornerstone of polymorphism in C++ and is related to the idea of late binding."
+            },
+            {
+              "question": "How can you open a file for both reading and writing using `fstream`?",
+              "answerOptions": [
+                {
+                  "text": "By calling `open()` with no arguments.",
+                  "rationale": "The `open()` function requires arguments to specify the file name and mode.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "By using the `ios::in` and `ios::out` flags together.",
+                  "rationale": "To open a file for both input and output, you must combine the `ios::in` and `ios::out` flags using the bitwise OR operator ($|$) in the `open()` function.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "By using two separate `open()` calls, one for input and one for output.",
+                  "rationale": "You can open a file for both reading and writing with a single `open()` call and a single `fstream` object.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "It is not possible to open a single file for both reading and writing simultaneously.",
+                  "rationale": "It is possible to open a single file for both reading and writing using `fstream`.",
+                  "isCorrect": false
+                }
+              ],
+              "hint": "Think about the file mode flags used with the `open()` function."
+            },
+            {
+              "question": "What is the primary benefit of using `function overloading`?",
+              "answerOptions": [
+                {
+                  "text": "It reduces the size of the compiled program.",
+                  "rationale": "Function overloading can increase the size of the compiled program due to multiple function definitions.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "It simplifies code by allowing a single name to be used for different functions that perform similar tasks.",
+                  "rationale": "Function overloading allows you to use the same function name for different functions that operate on different data types or have different numbers of arguments, improving code readability and making it more intuitive.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "It allows a function to accept a variable number of arguments.",
+                  "rationale": "This is a feature of variadic functions or templates, not function overloading.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "It prevents a function from being called by other parts of the program.",
+                  "rationale": "This is incorrect. Access specifiers are used to control function accessibility."
+                }
+              ],
+              "hint": "Consider how this feature impacts the readability and organization of your code."
+            },
+            {
+              "question": "When is the `new` operator used?",
+              "answerOptions": [
+                {
+                  "text": "To create a constant variable.",
+                  "rationale": "`const` is used to create a constant variable.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To declare a new function.",
+                  "rationale": "Functions are declared with their return type and name, not with `new`.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To allocate memory on the stack.",
+                  "rationale": "Variables on the stack are created implicitly when they are declared, not with `new`.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To allocate memory on the heap for a new object or variable.",
+                  "rationale": "The `new` operator is used to perform dynamic memory allocation for objects or arrays on the heap.",
+                  "isCorrect": true
+                }
+              ],
+              "hint": "This operator is used for dynamic memory management."
+            },
+            {
+              "question": "What is the purpose of the `throw` keyword in C++ exception handling?",
+              "answerOptions": [
+                {
+                  "text": "To declare a new exception type.",
+                  "rationale": "New exception types are typically defined as classes that derive from `std::exception`.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To identify a block of code that might contain an error.",
+                  "rationale": "The `try` block is used to identify a block of code that might throw an exception.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To transfer control to an exception handler.",
+                  "rationale": "The `throw` statement signals that an error or exceptional condition has occurred and transfers control to the nearest matching `catch` block.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "To catch an exception and handle it.",
+                  "rationale": "The `catch` block is used to catch and handle exceptions."
+                }
+              ],
+              "hint": "This keyword is used to initiate the exception-handling process."
+            },
+            {
+              "question": "What is the purpose of a `static` member function?",
+              "answerOptions": [
+                {
+                  "text": "It can access `private` members of the class from outside the class.",
+                  "rationale": "This is incorrect; `static` member functions still respect access specifiers. Friend functions are used for this purpose.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "It can only be called on an object of the class.",
+                  "rationale": "A `static` member function belongs to the class itself, not to an object, so it can be called without an object.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "It can access and modify `static` data members of the class.",
+                  "rationale": "Since `static` member functions are associated with the class, they are primarily used to operate on `static` data members.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "It can be overridden by derived classes.",
+                  "rationale": "The `virtual` keyword is used to enable overriding; `static` functions cannot be `virtual`."
+                }
+              ],
+              "hint": "Think about what kind of data a `static` member function can work with."
+            },
+            {
+              "question": "Which type of polymorphism is achieved through virtual functions and late binding?",
+              "answerOptions": [
+                {
+                  "text": "Ad-hoc polymorphism (function overloading)",
+                  "rationale": "Function overloading is a type of polymorphism, but it is resolved at compile time (early binding).",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Parametric polymorphism (templates)",
+                  "rationale": "Parametric polymorphism is achieved using templates, which allow for writing generic code.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Inclusion polymorphism (dynamic polymorphism)",
+                  "rationale": "Inclusion polymorphism, also known as dynamic polymorphism, is achieved through inheritance and virtual functions, where the function call is resolved at runtime.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "Static polymorphism",
+                  "rationale": "Static polymorphism (or compile-time polymorphism) is achieved through function overloading and operator overloading."
+                }
+              ],
+              "hint": "This type of polymorphism is often called 'runtime polymorphism'."
+            },
+            {
+              "question": "What is the primary role of a `const` member function?",
+              "answerOptions": [
+                {
+                  "text": "To make the function execute faster.",
+                  "rationale": "The `const` keyword does not affect the speed of the function.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To ensure that the function can only be called from a `const` object.",
+                  "rationale": "A `const` member function can be called on both `const` and non-`const` objects.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To prevent the function from modifying the data members of the object.",
+                  "rationale": "Declaring a member function as `const` guarantees that it will not modify any non-static data members of the object.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "To make the function's return value a constant.",
+                  "rationale": "The `const` keyword before the function name modifies the return value, not the `const` member function itself."
+                }
+              ],
+              "hint": "Think about the contract the function makes with the object it is a member of."
+            },
+            {
+              "question": "Which of the following describes a 'copy constructor'?",
+              "answerOptions": [
+                {
+                  "text": "A constructor with a single parameter that is a reference to an object of the same class.",
+                  "rationale": "A copy constructor is a special constructor that is used to initialize a new object from an existing one, and it typically takes a `const` reference to the source object.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "A constructor that takes no arguments.",
+                  "rationale": "This describes a default constructor.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A constructor that is used to explicitly allocate memory on the heap.",
+                  "rationale": "Constructors themselves do not explicitly allocate memory; they initialize objects after memory has been allocated.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A constructor that returns a copy of the object.",
+                  "rationale": "A constructor does not return a value."
+                }
+              ],
+              "hint": "Consider the signature of a constructor that creates a copy of an existing object."
+            },
+            {
+              "question": "What is a 'default argument' in a C++ function?",
+              "answerOptions": [
+                {
+                  "text": "An argument that is automatically passed to the function by the compiler.",
+                  "rationale": "Default arguments are not automatically passed; they are used when the caller does not provide a value for that argument.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "An argument that is used only if the function is not overloaded.",
+                  "rationale": "Default arguments and function overloading can be used together.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A value that the function parameter will take if no explicit value is provided during the function call.",
+                  "rationale": "A default argument provides a fallback value for a parameter, allowing you to call the function without specifying a value for that parameter.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "The first argument in a function's parameter list.",
+                  "rationale": "The position of a default argument in the parameter list is not restricted to the first position."
+                }
+              ],
+              "hint": "Think about how this feature can simplify calling a function with many parameters."
+            },
+            {
+              "question": "What is the purpose of the `<<` and `>>` operators when used with file streams?",
+              "answerOptions": [
+                {
+                  "text": "They are used for pointer arithmetic.",
+                  "rationale": "The `<<` and `>>` operators are used for bit shifting, not pointer arithmetic, outside of stream operations.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "They are used to create or destroy a file.",
+                  "rationale": "The `open()` and `close()` functions are used to create and destroy file associations.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "They are used to read and write data to/from files.",
+                  "rationale": "The `<<` operator is the insertion operator (for writing to a stream), and the `>>` operator is the extraction operator (for reading from a stream).",
+                  "isCorrect": true
+                },
+                {
+                  "text": "They are used to open a file in binary mode.",
+                  "rationale": "The file mode is specified using the `open()` function, not by these operators."
+                }
+              ],
+              "hint": "These operators are often referred to as insertion and extraction operators."
+            },
+            {
+              "question": "What is the key difference between a function template and an overloaded function?",
+              "answerOptions": [
+                {
+                  "text": "A function template must be explicitly instantiated, while an overloaded function is automatically instantiated.",
+                  "rationale": "Function templates are automatically instantiated by the compiler, and overloaded functions are simply different functions with the same name.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "An overloaded function works with a fixed set of data types, while a function template works with a single, specific data type.",
+                  "rationale": "This is incorrect. A function template works with many data types, while an overloaded function is a specific function for a specific data type.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Overloaded functions require a separate definition for each data type, while a function template provides a single definition for all types.",
+                  "rationale": "Function overloading requires a separate function for each data type, while a function template provides a single generic definition that the compiler uses to generate the necessary functions for different types.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "A function template is used for `int` and `double` types, while an overloaded function is used for user-defined types.",
+                  "rationale": "Both function templates and overloaded functions can be used for any data type, including basic types and user-defined types."
+                }
+              ],
+              "hint": "Think about how many times you have to write the function definition for each approach."
+            },
+            {
+              "question": "What is the purpose of `operator overloading`?",
+              "answerOptions": [
+                {
+                  "text": "To change the fundamental behavior of C++ operators.",
+                  "rationale": "You can only change the behavior of an operator for user-defined types; you cannot change its behavior for built-in types.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To allow the use of operators with user-defined data types in an intuitive way.",
+                  "rationale": "Operator overloading lets you give user-defined types a meaning for operators like `+`, `-`, `==`, etc., making the code more readable and expressive.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "To prevent the use of certain operators with a class.",
+                  "rationale": "The purpose of overloading is to extend the use of an operator, not to restrict it.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To create new operators that are not part of the C++ language.",
+                  "rationale": "You can only overload existing operators; you cannot create new ones."
+                }
+              ],
+              "hint": "Consider how you would perform arithmetic on two objects of a custom class."
+            },
+            {
+              "question": "What is the main difference between a `class` and an `object`?",
+              "answerOptions": [
+                {
+                  "text": "An `object` is a blueprint, while a `class` is an instance of that blueprint.",
+                  "rationale": "This statement is incorrect. A `class` is the blueprint, and an `object` is an instance of that blueprint.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A `class` is a physical entity, while an `object` is a logical construct.",
+                  "rationale": "This statement is incorrect. A `class` is a logical construct (a blueprint), and an `object` is a physical entity that exists in memory.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A `class` is a logical blueprint for an object, while an `object` is a physical instance of a class.",
+                  "rationale": "This correctly defines the relationship. A class defines the structure and behavior, and an object is a concrete instantiation of that class.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "There is no difference between a `class` and an `object`."
+                }
+              ],
+              "hint": "Think about the relationship between a blueprint and a house built from that blueprint."
+            },
+            {
+              "question": "What is a `copy assignment operator`?",
+              "answerOptions": [
+                {
+                  "text": "A function that is used to assign one object to another after both have been created.",
+                  "rationale": "The copy assignment operator is a member function that is automatically called when you assign an existing object to another existing object of the same class.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "A constructor used to initialize a new object with an existing object.",
+                  "rationale": "This describes a copy constructor, not a copy assignment operator.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "An operator that is used to create a new copy of an object on the heap.",
+                  "rationale": "The `new` operator is used to allocate memory on the heap.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A function that cannot be overloaded."
+                }
+              ],
+              "hint": "Think about what happens when you use the `=` operator with two existing objects."
+            },
+            {
+              "question": "Which type of inheritance is represented by a single derived class inheriting from a single base class?",
+              "answerOptions": [
+                {
+                  "text": "Multiple inheritance",
+                  "rationale": "Multiple inheritance involves a class inheriting from two or more base classes.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Hierarchical inheritance",
+                  "rationale": "Hierarchical inheritance involves multiple classes inheriting from a single base class.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Single inheritance",
+                  "rationale": "Single inheritance is the simplest form of inheritance, where a derived class inherits from only one base class.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "Multilevel inheritance"
+                }
+              ],
+              "hint": "This is the most straightforward and basic form of inheritance."
+            },
+            {
+              "question": "What is the purpose of the `private` access specifier?",
+              "answerOptions": [
+                {
+                  "text": "To make class members accessible only from outside the class.",
+                  "rationale": "This is incorrect. The `public` specifier makes members accessible from outside the class.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To make class members inaccessible to any other function or class.",
+                  "rationale": "This is incorrect. Friend functions and classes can access `private` members.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To restrict access to class members to only the member functions of that class.",
+                  "rationale": "The `private` access specifier ensures that the members can only be accessed by other member functions of the same class.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "To allow access to derived classes but not other classes."
+                }
+              ],
+              "hint": "Think about how you can enforce data encapsulation and hide the internal implementation of a class."
+            },
+            {
+              "question": "What is an `array of objects` in C++?",
+              "answerOptions": [
+                {
+                  "text": "An array that stores pointers to different classes.",
+                  "rationale": "This describes an array of pointers to objects, not an array of objects themselves.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A single object that contains multiple arrays as its members.",
+                  "rationale": "This describes an object with array members, not an array of objects.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "An array where each element is an object of a class.",
+                  "rationale": "An array of objects is an array where each index holds a complete object of the specified class.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "An array of pointers to objects."
+                }
+              ],
+              "hint": "Think about how you would create a list of objects of the same class."
+            },
+            {
+              "question": "Which C++ feature is used to manage a group of related functions and classes, and prevent their names from conflicting with other code?",
+              "answerOptions": [
+                {
+                  "text": "Friend functions",
+                  "rationale": "Friend functions are used to grant special access, not for managing name conflicts.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Namespaces",
+                  "rationale": "A namespace is a declarative region that provides a scope to the identifiers (names of types, functions, variables, etc.) inside it, preventing them from clashing with identifiers in other namespaces.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "Classes",
+                  "rationale": "Classes provide a scope for their members, but namespaces provide a scope for a broader set of declarations, including classes.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Headers"
+                }
+              ],
+              "hint": "Think about how the `std` library is organized."
+            },
+            {
+              "question": "What is the primary purpose of a 'pure virtual function'?",
+              "answerOptions": [
+                {
+                  "text": "To provide a default implementation of a function in the base class.",
+                  "rationale": "A pure virtual function has no implementation in the base class.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To force derived classes to provide an implementation for that function.",
+                  "rationale": "A pure virtual function is declared with `= 0` and makes the base class abstract, forcing all concrete derived classes to provide their own implementation.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "To prevent a function from being called.",
+                  "rationale": "A pure virtual function is meant to be implemented and called, not prevented from being called.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To allow a function to be called from a non-member function."
+                }
+              ],
+              "hint": "Think about how this feature enforces a contract on all classes that inherit from it."
+            },
+            {
+              "question": "What is the key characteristic of `static` data members?",
+              "answerOptions": [
+                {
+                  "text": "Each object of the class has its own copy of the `static` data member.",
+                  "rationale": "This is incorrect. Each object has its own copy of a non-`static` data member. `static` members are shared.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "They are initialized at runtime, and their value cannot be changed.",
+                  "rationale": "A `static` data member can be modified, and it is initialized outside the class definition.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "They belong to the class as a whole and are shared by all objects of that class.",
+                  "rationale": "A `static` data member is a single instance that is shared among all objects of the class, meaning there is only one copy of the variable.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "They can only be accessed by `private` member functions."
+                }
+              ],
+              "hint": "Think about the scope of the variable's existence: is it tied to the class or an object?"
+            },
+            {
+              "question": "What is the purpose of the `this` pointer in a member function?",
+              "answerOptions": [
+                {
+                  "text": "It is used to create a new object of the class.",
+                  "rationale": "The `new` operator and constructors are used to create objects."
+                },
+                {
+                  "text": "It is a pointer to the function that called the member function.",
+                  "rationale": "The `this` pointer does not point to the calling function."
+                },
+                {
+                  "text": "It is an implicit pointer to the object on which the member function was called.",
+                  "rationale": "The `this` pointer is a special pointer that holds the address of the object for which the member function is being invoked.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "It is a pointer to a `static` member of the class."
+                }
+              ],
+              "hint": "This pointer is what allows a member function to access the specific object's data members."
+            },
+            {
+              "question": "What is the key difference between a `class` template and a `function` template?",
+              "answerOptions": [
+                {
+                  "text": "A `class` template is a blueprint for generic classes, while a `function` template is a blueprint for generic functions.",
+                  "rationale": "This statement accurately describes the distinction. A class template generates classes for different types, and a function template generates functions.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "A `class` template can only be used with `int` and `double` types.",
+                  "rationale": "Class templates, like function templates, are generic and can be used with any data type.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A `function` template can have multiple parameters, while a `class` template can only have one.",
+                  "rationale": "Both class templates and function templates can have multiple template parameters.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A `class` template is instantiated at runtime, while a `function` template is instantiated at compile time."
+                }
+              ],
+              "hint": "Think about what each template is a blueprint for."
+            },
+            {
+              "question": "What is a major advantage of using inheritance in OOP?",
+              "answerOptions": [
+                {
+                  "text": "It reduces the amount of memory used by a program.",
+                  "rationale": "While it can be memory efficient, its primary advantage is not memory reduction but code reuse.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "It makes all members of the base class public.",
+                  "rationale": "The access specifiers of the base class members determine their visibility in the derived class.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "It promotes code reuse and helps in building a hierarchical classification of objects.",
+                  "rationale": "Inheritance allows a new class to inherit properties and behaviors from a base class, which is a powerful way to reuse code and model 'is-a' relationships.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "It prevents a class from having multiple functions with the same name."
+                }
+              ],
+              "hint": "Consider the core principle of building upon existing code."
+            },
+            {
+              "question": "In C++, what is a `destructor`?",
+              "answerOptions": [
+                {
+                  "text": "A special function that is used to initialize an object's data members.",
+                  "rationale": "This describes a constructor.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A member function that cannot be overloaded.",
+                  "rationale": "A destructor is a special member function that cannot be overloaded because it does not take any arguments.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "A function that is called after the `main` function finishes execution.",
+                  "rationale": "A destructor is called when an object is destroyed, not after the `main` function finishes.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A function that is used to explicitly delete an object from memory."
+                }
+              ],
+              "hint": "This function is automatically called when an object goes out of scope."
+            },
+            {
+              "question": "What is the purpose of the `ios::app` file opening mode?",
+              "answerOptions": [
+                {
+                  "text": "To open a file for reading only.",
+                  "rationale": "The `ios::in` mode is for reading.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To open a file and truncate its contents.",
+                  "rationale": "The `ios::trunc` mode truncates the file.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To open a file and move the file pointer to the end for appending.",
+                  "rationale": "The `ios::app` (append) mode opens a file for writing and positions the file pointer at the end of the file, so all new data is added to the end.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "To open a file in binary mode."
+                }
+              ],
+              "hint": "Think about what 'app' stands for in this context."
+            },
+            {
+              "question": "What does it mean to `overload a constructor`?",
+              "answerOptions": [
+                {
+                  "text": "To define a constructor that can be used to initialize a new object with an existing object.",
+                  "rationale": "This describes a copy constructor, which is one type of overloaded constructor.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To define a destructor that is called after the object is destroyed.",
+                  "rationale": "A destructor is a separate concept and cannot be overloaded.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To define multiple constructors in the same class with different parameter lists.",
+                  "rationale": "Constructor overloading is the process of providing multiple constructors with the same name but different signatures (different number or types of parameters).",
+                  "isCorrect": true
+                },
+                {
+                  "text": "To change the behavior of the default constructor."
+                }
+              ],
+              "hint": "Think about how you can create an object using different initial values."
+            },
+            {
+              "question": "Which of the following describes `data abstraction`?",
+              "answerOptions": [
+                {
+                  "text": "The process of combining data and functions into a single unit.",
+                  "rationale": "This describes `encapsulation`, not `data abstraction`.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "The process of hiding the implementation details of a class from the user.",
+                  "rationale": "Data abstraction is the concept of providing a simplified view of an object while hiding the complex implementation details.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "The process of creating a new class from an existing class.",
+                  "rationale": "This describes `inheritance`.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "The ability of an object to take on many forms."
+                }
+              ],
+              "hint": "Consider the idea of hiding the 'how' and exposing the 'what'."
+            },
+            {
+              "question": "What is the purpose of the `protected` access specifier?",
+              "answerOptions": [
+                {
+                  "text": "To make class members accessible from anywhere in the program.",
+                  "rationale": "This describes the `public` access specifier.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To make class members accessible only from within the class itself.",
+                  "rationale": "This describes the `private` access specifier.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To make class members accessible to the class itself and to derived classes.",
+                  "rationale": "The `protected` access specifier allows members to be accessed by member functions and `friend` functions/classes of both the class itself and its derived classes.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "To make class members accessible only to the `main` function."
+                }
+              ],
+              "hint": "This specifier provides a balance between `private` and `public` access in an inheritance hierarchy."
+            },
+            {
+              "question": "What is the key benefit of `polymorphism`?",
+              "answerOptions": [
+                {
+                  "text": "It allows a class to have multiple constructors with the same name.",
+                  "rationale": "This describes constructor overloading, not polymorphism.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "It enables a single interface to be used for different underlying forms or data types.",
+                  "rationale": "Polymorphism allows you to treat objects of different classes as a single type, enabling more flexible and extensible code.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "It prevents a class from being inherited by another class.",
+                  "rationale": "The `final` specifier (in C++11 and later) is used to prevent a class from being inherited.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "It ensures that a class can only have one destructor."
+                }
+              ],
+              "hint": "Think about the meaning of the word 'polymorphism'."
+            },
+            {
+              "question": "Which type of polymorphism is achieved using function overloading?",
+              "answerOptions": [
+                {
+                  "text": "Runtime polymorphism",
+                  "rationale": "Runtime polymorphism is achieved through virtual functions and late binding.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Compile-time polymorphism",
+                  "rationale": "Function overloading is resolved at compile time, which is a form of static or compile-time polymorphism.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "Dynamic polymorphism",
+                  "rationale": "Dynamic polymorphism is another name for runtime polymorphism.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Inclusion polymorphism"
+                }
+              ],
+              "hint": "Think about when the compiler decides which function to call."
+            },
+            {
+              "question": "What is a `virtual function table` (v-table)?",
+              "answerOptions": [
+                {
+                  "text": "A table that stores a list of all member functions of a class.",
+                  "rationale": "A v-table specifically stores pointers to the virtual functions of a class.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A table that is used for early binding.",
+                  "rationale": "The v-table is used for late binding, not early binding.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A table of function pointers used to resolve `virtual` function calls at runtime.",
+                  "rationale": "Each class that has one or more virtual functions has a v-table, which is a lookup table of pointers to the actual function implementations, enabling runtime polymorphism.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "A table that stores all the data members of an object."
+                }
+              ],
+              "hint": "This is a key mechanism that allows C++ to implement runtime polymorphism."
+            },
+            {
+              "question": "What is the purpose of the `new` and `delete` operators?",
+              "answerOptions": [
+                {
+                  "text": "They are used to create and destroy objects on the stack.",
+                  "rationale": "Objects on the stack are created and destroyed automatically when they enter or leave a scope.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "They are used to manage memory on the heap.",
+                  "rationale": "The `new` operator allocates memory on the heap, and the `delete` operator deallocates it.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "They are used to create and delete a file on the disk.",
+                  "rationale": "File system operations are handled by functions in the `fstream` library.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "They are used to create new classes from existing ones."
+                }
+              ],
+              "hint": "Think about where the memory is allocated for a dynamically created object."
+            },
+            {
+              "question": "What is the primary role of a `constructor`?",
+              "answerOptions": [
+                {
+                  "text": "To deallocate memory for an object.",
+                  "rationale": "The destructor is responsible for deallocating memory and cleaning up.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To make all members of a class private.",
+                  "rationale": "Access specifiers are used to control the visibility of class members.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To initialize the data members of a new object.",
+                  "rationale": "A constructor is a special member function that is automatically called when an object is created to initialize its data members.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "To convert a basic data type to a user-defined type."
+                }
+              ],
+              "hint": "This function is automatically called when an object comes into existence."
+            },
+            {
+              "question": "Which type of `type conversion` is handled automatically by the compiler?",
+              "answerOptions": [
+                {
+                  "text": "Type casting",
+                  "rationale": "Type casting is an explicit conversion performed by the programmer.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Implicit conversion",
+                  "rationale": "Implicit conversions are handled automatically by the compiler, such as converting a `char` to an `int`.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "Conversion from a class type to a basic type",
+                  "rationale": "This type of conversion is usually explicit, often using a conversion operator.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "User-defined conversion"
+                }
+              ],
+              "hint": "Think about conversions that happen without you having to write any special code."
+            },
+            {
+              "question": "What is the purpose of the `main()` function in a C++ program?",
+              "answerOptions": [
+                {
+                  "text": "It is a member function of the `iostream` class.",
+                  "rationale": "The `main()` function is a global function, not a member function of any class.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "It is an entry point for the program where execution begins.",
+                  "rationale": "The `main()` function is the entry point of every C++ program, and program execution begins with the first line of code inside it.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "It is used to define new classes and objects.",
+                  "rationale": "Classes and objects are defined outside of the `main()` function, although objects can be instantiated inside it.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "It is used for handling exceptions."
+                }
+              ],
+              "hint": "Consider the first thing that a program does when it starts."
+            },
+            {
+              "question": "What is the difference between a `pointer` and a `reference` in C++?",
+              "answerOptions": [
+                {
+                  "text": "A `pointer` cannot be null, while a `reference` can be null.",
+                  "rationale": "This is incorrect. A `pointer` can be null, while a `reference` must always be bound to an object and cannot be null.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A `pointer` is an alias for a variable, while a `reference` stores the memory address of a variable.",
+                  "rationale": "This is incorrect. A `reference` is an alias, and a `pointer` stores a memory address.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A `pointer` can be reassigned to point to a different variable, while a `reference` cannot be reseated once initialized.",
+                  "rationale": "A `pointer` can be changed to point to a different memory location, but a `reference` is an alias that is permanently bound to the variable it was initialized with.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "A `reference` can perform pointer arithmetic, while a `pointer` cannot."
+                }
+              ],
+              "hint": "Think about the flexibility of each variable type after it has been initialized."
+            },
+            {
+              "question": "Which of the following describes a 'default constructor'?",
+              "answerOptions": [
+                {
+                  "text": "A constructor that takes one or more arguments.",
+                  "rationale": "This describes a parameterized constructor.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A constructor that is used to initialize an object with an existing object of the same class.",
+                  "rationale": "This describes a copy constructor.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A constructor that is automatically generated by the compiler if no other constructors are defined.",
+                  "rationale": "The compiler provides a default constructor if you do not define any constructors yourself.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "A constructor that is always called, regardless of how the object is created."
+                }
+              ],
+              "hint": "Consider what happens if you create an object without passing any initial values."
+            },
+            {
+              "question": "What is the difference between `overriding` and `overloading` a function?",
+              "answerOptions": [
+                {
+                  "text": "`Overloading` is in the same class, while `overriding` is in a derived class.",
+                  "rationale": "Function overloading allows functions with the same name but different signatures to exist in the same scope. Overriding occurs when a derived class provides its own implementation of a virtual function from its base class.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "`Overloading` uses a `virtual` keyword, while `overriding` does not.",
+                  "rationale": "This is incorrect. `Overriding` uses the `virtual` keyword.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "`Overriding` requires the function signature to be different, while `overloading` requires it to be the same.",
+                  "rationale": "This is incorrect. `Overloading` requires a different signature, and `overriding` requires the same signature.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "There is no difference between the two terms."
+                }
+              ],
+              "hint": "Think about where each concept takes place in a class hierarchy."
+            },
+            {
+              "question": "Which of the following describes `late binding`?",
+              "answerOptions": [
+                {
+                  "text": "The linking of a function call to a function definition at compile time.",
+                  "rationale": "This describes `early binding`.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "The linking of a function call to a function definition at runtime.",
+                  "rationale": "Late binding, or dynamic binding, uses the v-table to determine which version of a virtual function to call at runtime.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "The process of creating a new object from an existing one.",
+                  "rationale": "This describes object creation, not binding.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "The process of linking a function call to a function definition using `const` pointers."
+                }
+              ],
+              "hint": "This is a key concept for achieving polymorphism with virtual functions."
+            },
+            {
+              "question": "Which of the following describes a `copy constructor`?",
+              "answerOptions": [
+                {
+                  "text": "A constructor that takes no arguments.",
+                  "rationale": "This is a default constructor.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A constructor that creates a copy of an existing object of the same class.",
+                  "rationale": "A copy constructor is a special constructor that is used to initialize a new object as a copy of an existing object.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "A constructor that can take a variable number of arguments.",
+                  "rationale": "This is not a feature of a copy constructor.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A constructor that is used to deallocate memory."
+                }
+              ],
+              "hint": "Consider the special purpose of this type of constructor."
+            },
+            {
+              "question": "What is the purpose of `Function overloading`?",
+              "answerOptions": [
+                {
+                  "text": "To allow a single function to be used with different data types.",
+                  "rationale": "Function overloading allows you to have multiple functions with the same name, but they must have different parameter lists.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To define a function that can be called with optional arguments.",
+                  "rationale": "This is achieved using default arguments, not function overloading.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To create multiple functions with the same name that have different parameter lists.",
+                  "rationale": "Function overloading allows a single function name to be used for multiple functions, provided each has a unique signature.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "To ensure that a function can be inherited by a derived class."
+                }
+              ],
+              "hint": "Think about how you can have a single name like 'print' for printing different data types."
+            },
+            {
+              "question": "What is the `this` pointer in a C++ member function?",
+              "answerOptions": [
+                {
+                  "text": "A pointer to the base class of the object.",
+                  "rationale": "The `this` pointer points to the current object, not its base class.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A pointer to the class itself.",
+                  "rationale": "The `this` pointer points to an object of the class, not the class definition itself.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A pointer to the object for which the member function is called.",
+                  "rationale": "The `this` pointer is a special pointer that holds the memory address of the object on which the member function is being invoked.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "A pointer to a `static` member of the class."
+                }
+              ],
+              "hint": "This pointer is implicitly passed to every non-static member function."
+            },
+            {
+              "question": "What is the purpose of the `friend` keyword?",
+              "answerOptions": [
+                {
+                  "text": "To allow a class to be inherited by another class.",
+                  "rationale": "Inheritance is used to create new classes from existing ones.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To allow a non-member function to access the `private` and `protected` members of a class.",
+                  "rationale": "Declaring a function or class as a `friend` grants it special access to the `private` and `protected` members of the class that has declared it as a friend.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "To make all members of a class accessible from anywhere.",
+                  "rationale": "The `public` specifier is used to make members accessible from anywhere.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To define a function that can be called from outside the class."
+                }
+              ],
+              "hint": "Think about how you can give a non-member function special access privileges to a class's internal data."
+            },
+            {
+              "question": "What is the purpose of `operator overloading` in C++?",
+              "answerOptions": [
+                {
+                  "text": "To create new operators that are not part of the C++ language.",
+                  "rationale": "You can only overload existing operators, not create new ones.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To allow operators to be used with user-defined data types.",
+                  "rationale": "Operator overloading allows you to define how an operator (like `+` or `==`) should behave when used with objects of your own classes.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "To change the precedence of operators.",
+                  "rationale": "The precedence of operators is fixed and cannot be changed by overloading.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To make a program run faster by optimizing operator calls."
+                }
+              ],
+              "hint": "Consider how this feature allows you to write more intuitive code for your own classes."
+            },
+            {
+              "question": "What is a `pure virtual function`?",
+              "answerOptions": [
+                {
+                  "text": "A function that has no parameters.",
+                  "rationale": "A function's pure virtual status is not related to its parameters.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A function that is defined with a body in the base class.",
+                  "rationale": "A pure virtual function has no definition in the base class.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A function that is declared with `= 0` and makes the class abstract.",
+                  "rationale": "A pure virtual function is a virtual function with a `= 0` initializer, which forces derived classes to provide an implementation and makes the base class an abstract base class.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "A function that cannot be inherited."
+                }
+              ],
+              "hint": "This type of function is a contract for derived classes."
+            },
+            {
+              "question": "What is the purpose of the `ios::ate` file opening mode?",
+              "answerOptions": [
+                {
+                  "text": "To open a file for reading only.",
+                  "rationale": "`ios::ate` can be used with both input and output streams.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To open a file for both reading and writing.",
+                  "rationale": "This can be achieved with `ios::in` and `ios::out`, but `ios::ate` has a different primary function.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To open a file and seek to the end of the file immediately after opening.",
+                  "rationale": "The `ios::ate` (at end) mode opens the file and immediately positions the file pointer at the end of the file.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "To open a file and truncate its contents."
+                }
+              ],
+              "hint": "The name of the mode provides a strong clue."
+            },
+            {
+              "question": "What is the primary purpose of a `template` in C++?",
+              "answerOptions": [
+                {
+                  "text": "To create functions and classes that can only be used with built-in data types.",
+                  "rationale": "Templates are designed to work with any data type, including user-defined ones.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To allow a function to have multiple definitions with the same name.",
+                  "rationale": "This is function overloading, which does not require templates.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To write generic code that can work with different data types without duplication.",
+                  "rationale": "Templates allow you to create a single blueprint for a function or class that can be used with a variety of data types, reducing code redundancy.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "To automatically convert data types from one to another."
+                }
+              ],
+              "hint": "Think about how the Standard Template Library (STL) is built."
+            },
+            {
+              "question": "What is the `Standard Template Library` (STL)?",
+              "answerOptions": [
+                {
+                  "text": "A library for graphical user interface (GUI) development.",
+                  "rationale": "The STL is a set of generic classes for data structures and algorithms, not a GUI library.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A collection of generic classes and algorithms for common programming tasks.",
+                  "rationale": "The STL provides reusable components like containers (e.g., `vector`, `list`), algorithms (e.g., `sort`, `find`), and iterators.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "A framework for building web applications in C++.",
+                  "rationale": "The STL is a general-purpose library, not a web development framework.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A library for handling network communication."
+                }
+              ],
+              "hint": "The name itself gives a clue as to its purpose and composition."
+            },
+            {
+              "question": "Which of the following is an example of `early binding`?",
+              "answerOptions": [
+                {
+                  "text": "A virtual function call on a base class pointer.",
+                  "rationale": "This is an example of `late binding`.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Calling a non-virtual function on an object.",
+                  "rationale": "A non-virtual function call is resolved at compile time, which is the definition of early binding.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "Using a function pointer to call a function.",
+                  "rationale": "Using a function pointer can lead to `late binding` if the pointer's value is determined at runtime.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Using the `dynamic_cast` operator."
+                }
+              ],
+              "hint": "Think about which function calls are resolved at compile time."
+            },
+            {
+              "question": "Which of the following describes `late binding`?",
+              "answerOptions": [
+                {
+                  "text": "The binding of a function call to a function at compile time.",
+                  "rationale": "This describes `early binding`.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "The binding of a function call to a function at runtime.",
+                  "rationale": "Late binding, or dynamic binding, uses the v-table to determine which virtual function to call at runtime based on the object's type.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "The linking of a function call to a function definition using `const` pointers.",
+                  "rationale": "This is incorrect. Late binding is not related to `const` pointers.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "The process of creating a new object from an existing one."
+                }
+              ],
+              "hint": "This is a key concept for achieving polymorphism with virtual functions."
+            },
+            {
+              "question": "What is the purpose of the `final` specifier in C++11?",
+              "answerOptions": [
+                {
+                  "text": "To allow a class to be inherited by other classes.",
+                  "rationale": "This is incorrect. `final` is used to prevent inheritance.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To prevent a class from being inherited or a virtual function from being overridden.",
+                  "rationale": "The `final` specifier is used to prevent a class from being a base class and to prevent a virtual function from being overridden in a derived class.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "To make all members of a class private.",
+                  "rationale": "This is incorrect. Access specifiers are used to control member accessibility.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To ensure that a function can be called from outside the class."
+                }
+              ],
+              "hint": "Think about how you can stop the inheritance chain for a class or a function."
+            },
+            {
+              "question": "What is the difference between `overriding` and `overloading` a function?",
+              "answerOptions": [
+                {
+                  "text": "Overriding allows multiple functions with the same name and different parameters.",
+                  "rationale": "This describes function overloading.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Overriding is a feature of a single class, while overloading is a feature of inheritance.",
+                  "rationale": "This is incorrect. Overloading is a feature of a single class, while overriding is a feature of inheritance.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Overloading provides a new implementation of a function in a derived class.",
+                  "rationale": "This describes function overriding.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "Overloading is for functions with the same name and different signatures, while overriding is for functions with the same name and signature in a derived class.",
+                  "rationale": "This accurately distinguishes the two concepts. Overloading works within the same scope, and overriding is for virtual functions in a derived class.",
+                  "isCorrect": true
+                }
+              ],
+              "hint": "Consider the role of the `virtual` keyword and the class hierarchy."
+            },
+            {
+              "question": "What is a `pure virtual function`?",
+              "answerOptions": [
+                {
+                  "text": "A function that can be called without an object.",
+                  "rationale": "This describes a static member function.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A function that must be defined in the base class.",
+                  "rationale": "A pure virtual function has no definition in the base class.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A function that is used to deallocate memory.",
+                  "rationale": "This is a destructor.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A function that forces a derived class to provide an implementation.",
+                  "rationale": "A pure virtual function is a virtual function with a `= 0` initializer that acts as a contract, forcing all concrete derived classes to provide their own implementation.",
+                  "isCorrect": true
+                }
+              ],
+              "hint": "This concept is a tool for creating an abstract base class."
+            },
+            {
+              "question": "What is the primary purpose of a `destructor`?",
+              "answerOptions": [
+                {
+                  "text": "To initialize the data members of a new object.",
+                  "rationale": "This is the purpose of a constructor.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To deallocate resources and perform cleanup operations when an object is destroyed.",
+                  "rationale": "A destructor is a special member function that is automatically called when an object is destroyed to release any resources it may have acquired.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "To create a new copy of an existing object.",
+                  "rationale": "This is the purpose of a copy constructor.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To allow a class to be inherited by another class."
+                }
+              ],
+              "hint": "Think about what happens to an object's memory and resources when it goes out of scope."
+            },
+            {
+              "question": "What is `multilevel inheritance`?",
+              "answerOptions": [
+                {
+                  "text": "A derived class inheriting from two or more base classes.",
+                  "rationale": "This is `multiple inheritance`.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A derived class inheriting from a single base class.",
+                  "rationale": "This is `single inheritance`.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A class that serves as a base for multiple derived classes.",
+                  "rationale": "This is `hierarchical inheritance`.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A derived class inheriting from another derived class.",
+                  "rationale": "Multilevel inheritance forms a chain where a class inherits from a class that is itself derived from another base class.",
+                  "isCorrect": true
+                }
+              ],
+              "hint": "Think about a chain of command or a family tree."
+            },
+            {
+              "question": "What is the purpose of the `ios::binary` file opening mode?",
+              "answerOptions": [
+                {
+                  "text": "To open a file for reading and writing text only.",
+                  "rationale": "`ios::binary` is used for non-textual data.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To open a file and truncate its contents.",
+                  "rationale": "This is the purpose of `ios::trunc`.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To open a file for reading and writing data in binary format.",
+                  "rationale": "The `ios::binary` mode is used to open a file in a mode where no character translation (e.g., converting newline characters) takes place.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "To open a file for appending data to the end."
+                }
+              ],
+              "hint": "This mode is used when you don't want the stream to perform any special handling of newline characters."
+            },
+            {
+              "question": "What is the purpose of `Function overloading`?",
+              "answerOptions": [
+                {
+                  "text": "To allow a function to have multiple return types.",
+                  "rationale": "A function can only have one return type.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To allow a function to be inherited by a derived class.",
+                  "rationale": "Inheritance is the mechanism for code reuse.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To provide multiple implementations for a single function name, distinguished by their parameter lists.",
+                  "rationale": "Function overloading allows you to define multiple functions with the same name, as long as they have different numbers or types of parameters.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "To ensure that a function can only be called from within its class."
+                }
+              ],
+              "hint": "This feature helps reduce the number of unique function names you need to create for similar operations."
+            },
+            {
+              "question": "What is `encapsulation` in OOP?",
+              "answerOptions": [
+                {
+                  "text": "The process of creating a new class from an existing class.",
+                  "rationale": "This is `inheritance`.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "The ability of an object to take on many forms.",
+                  "rationale": "This is `polymorphism`.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "The binding of data and the functions that operate on that data into a single unit.",
+                  "rationale": "Encapsulation is the bundling of data and methods that operate on that data into a single unit (a class), and also restricting access to some of the object's components.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "The process of hiding the implementation details of a class."
+                }
+              ],
+              "hint": "Think about how data and functions are wrapped up together in a class."
+            },
+            {
+              "question": "What is the purpose of the `static` keyword for a member function?",
+              "answerOptions": [
+                {
+                  "text": "It ensures that the function can only be called from a `const` object.",
+                  "rationale": "This is incorrect. A `const` member function is used for this purpose.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "It allows the function to be called on a class without an object.",
+                  "rationale": "A `static` member function belongs to the class itself, not to a specific object, so it can be called using the class name and the scope resolution operator.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "It allows the function to be inherited by a derived class.",
+                  "rationale": "This is incorrect. `static` functions are not `virtual` and cannot be overridden by derived classes.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "It allows the function to access private members of the class from outside."
+                }
+              ],
+              "hint": "Consider the scope of the function's existence: is it tied to the class or an object?"
+            },
+            {
+              "question": "Which of the following describes a `function template`?",
+              "answerOptions": [
+                {
+                  "text": "A function that has no return type.",
+                  "rationale": "A function must have a return type, or be declared as `void`.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A function that can be used to read and write to files.",
+                  "rationale": "This is incorrect. File handling is done with streams.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "A blueprint for creating functions that work with multiple data types.",
+                  "rationale": "A function template allows you to define a generic function that can be instantiated by the compiler with different data types.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "A function that is only used for sorting data."
+                }
+              ],
+              "hint": "This feature helps you avoid writing the same code over and over again for different data types."
+            },
+            {
+              "question": "What is the purpose of a `virtual function` in C++?",
+              "answerOptions": [
+                {
+                  "text": "To allow a class to be inherited by another class.",
+                  "rationale": "This is incorrect. Inheritance is the mechanism for code reuse.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To ensure that a function can only be called from a derived class.",
+                  "rationale": "A virtual function can be called from both the base class and derived class.",
+                  "isCorrect": false
+                },
+                {
+                  "text": "To enable late binding and polymorphism in a class hierarchy.",
+                  "rationale": "A `virtual` function allows the compiler to determine which version of an overridden function to call at runtime based on the actual object type, not the pointer type.",
+                  "isCorrect": true
+                },
+                {
+                  "text": "To make all members of a class private."
+                }
+              ],
+              "hint": "This feature is the cornerstone of runtime polymorphism."
+            }
+          ]
+        };
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = new Array(quizData.questions.length).fill(null); // Stores index of selected answer for each question
+        let hasAnsweredCurrentQuestion = false;
+
+        const quizContentDiv = document.getElementById('quiz-content');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const questionTextElement = document.getElementById('question-text');
+        const answerOptionsDiv = document.getElementById('answer-options');
+        const feedbackArea = document.getElementById('feedback-area');
+        const backButton = document.getElementById('back-button');
+        const nextButton = document.getElementById('next-button');
+        const resultScreen = document.getElementById('result-screen');
+        const finalScoreSpan = document.getElementById('score');
+        const totalScoreSpan = document.getElementById('total-score');
+        const restartButton = document.getElementById('restart-button');
+        const currentQuestionNumberSpan = document.getElementById('current-question-number');
+        const totalQuestionsSpan = document.getElementById('total-questions');
+        const progressBar = document.getElementById('progress-bar');
+
+        // Function to display a question
+        function displayQuestion() {
+            // Show quiz content, hide loading
+            loadingIndicator.style.display = 'none';
+            quizContentDiv.style.display = 'flex';
+
+            const question = quizData.questions[currentQuestionIndex];
+            questionTextElement.innerHTML = formatCode(question.question);
+            answerOptionsDiv.innerHTML = '';
+            feedbackArea.innerHTML = '';
+            hasAnsweredCurrentQuestion = userAnswers[currentQuestionIndex] !== null;
+
+            question.answerOptions.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.classList.add('answer-option');
+                optionDiv.innerHTML = `
+                    <input type="radio" id="option${index}" name="answer" value="${index}" class="w-5 h-5 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                    <label for="option${index}" class="ml-3 text-lg text-gray-800 flex-grow">${option.text}</label>
+                `;
+                answerOptionsDiv.appendChild(optionDiv);
+
+                if (userAnswers[currentQuestionIndex] === index) {
+                    optionDiv.classList.add('selected');
+                    optionDiv.querySelector('input').checked = true;
+                }
+
+                optionDiv.addEventListener('click', () => selectAnswer(index));
+            });
+
+            updateNavigationButtons();
+            updateProgressBar();
+            updateQuestionNumber();
+
+            if (hasAnsweredCurrentQuestion) {
+                showFeedback(quizData.questions[currentQuestionIndex], userAnswers[currentQuestionIndex]);
+                disableOptions();
+            }
+        }
+
+        function selectAnswer(selectedIndex) {
+            if (hasAnsweredCurrentQuestion) return; // Prevent changing answer after submission
+
+            const options = Array.from(answerOptionsDiv.children);
+            options.forEach((option, index) => {
+                option.classList.remove('selected');
+                option.querySelector('input').checked = false;
+                if (index === selectedIndex) {
+                    option.classList.add('selected');
+                    option.querySelector('input').checked = true;
+                    userAnswers[currentQuestionIndex] = selectedIndex;
+                }
+            });
+
+            // Immediately show feedback after selecting an answer
+            showFeedback(quizData.questions[currentQuestionIndex], selectedIndex);
+            disableOptions();
+            hasAnsweredCurrentQuestion = true;
+        }
+
+        function showFeedback(question, selectedIndex) {
+            feedbackArea.innerHTML = '';
+            const feedbackDiv = document.createElement('div');
+            feedbackDiv.classList.add('feedback-message');
+
+            const correctAnswerIndex = question.answerOptions.findIndex(opt => opt.isCorrect);
+            const selectedOption = question.answerOptions[selectedIndex];
+
+            if (selectedOption && selectedOption.isCorrect) {
+                feedbackDiv.classList.add('feedback-correct');
+                feedbackDiv.textContent = 'Correct! ' + selectedOption.rationale;
+                if (userAnswers[currentQuestionIndex] === selectedIndex) { // Only increment score if it's a new correct answer for this question
+                     if (!question.answeredCorrectly) {
+                         score++;
+                         question.answeredCorrectly = true; // Mark question as correctly answered
+                     }
+                }
+            } else {
+                feedbackDiv.classList.add('feedback-incorrect');
+                let feedbackText = 'Incorrect. ';
+                if (selectedOption) {
+                    feedbackText += selectedOption.rationale + ' ';
+                }
+                feedbackText += 'The correct answer was: ' + question.answerOptions[correctAnswerIndex].text;
+                feedbackDiv.textContent = feedbackText;
+                if (question.answeredCorrectly) { // If previously correct, decrement score as it's now incorrect
+                    score--;
+                    question.answeredCorrectly = false;
+                }
+            }
+            feedbackArea.appendChild(feedbackDiv);
+
+            // Highlight correct/incorrect answers
+            const options = Array.from(answerOptionsDiv.children);
+            options.forEach((option, index) => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+                if (index === correctAnswerIndex) {
+                    option.classList.add('correct');
+                } else if (index === selectedIndex && !question.answerOptions[selectedIndex].isCorrect) {
+                    option.classList.add('incorrect');
+                }
+            });
+        }
+
+        function disableOptions() {
+            const options = Array.from(answerOptionsDiv.children);
+            options.forEach(option => {
+                option.style.pointerEvents = 'none'; // Disable further clicks
+                option.querySelector('input').disabled = true; // Disable radio buttons
+            });
+        }
+
+        function updateNavigationButtons() {
+            backButton.disabled = currentQuestionIndex === 0;
+            if (currentQuestionIndex === quizData.questions.length - 1) {
+                nextButton.textContent = 'Submit Quiz';
+            } else {
+                nextButton.textContent = 'Next';
+            }
+        }
+
+        function updateProgressBar() {
+            const progress = ((currentQuestionIndex + 1) / quizData.questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        function updateQuestionNumber() {
+            currentQuestionNumberSpan.textContent = currentQuestionIndex + 1;
+            totalQuestionsSpan.textContent = quizData.questions.length;
+        }
+
+        function showResultScreen() {
+            quizContentDiv.style.display = 'none';
+            resultScreen.style.display = 'flex';
+            finalScoreSpan.textContent = score;
+            totalScoreSpan.textContent = quizData.questions.length;
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers.fill(null);
+            quizData.questions.forEach(q => q.answeredCorrectly = false); // Reset answered correctly flag
+            resultScreen.style.display = 'none';
+            displayQuestion();
+        }
+
+        function formatCode(text) {
+            // Regular expression to find code blocks marked by ```cpp ... ```
+            const codeBlockRegex = /```(cpp|c\+\+)\n([\s\S]*?)\n```/g;
+            // Regular expression to find inline code snippets marked by `...` or $...$
+            const inlineCodeRegex = /(`([^`]+)`|\$([^\$]+)\$)/g;
+
+            // Replace code blocks first to avoid issues with inline code inside blocks
+            let formattedText = text.replace(codeBlockRegex, (match, lang, code) => {
+                return `<pre><code>${code.trim()}</code></pre>`;
+            });
+
+            // Then replace inline code snippets
+            formattedText = formattedText.replace(inlineCodeRegex, (match, p1, p2, p3) => {
+                const code = p2 || p3; // p2 for backticks, p3 for dollar signs
+                // Basic check to ensure it's not complex LaTeX formulas that shouldn't be treated as code inline
+                if (code && !code.includes('\\')) { // Simple check, could be improved
+                    return `<code class="bg-gray-200 px-1 py-0.5 rounded">${code.trim()}</code>`;
+                }
+                return match; // Return original match if it looks like LaTeX
+            });
+
+            return formattedText;
+        }
+
+        // Event Listeners
+        nextButton.addEventListener('click', () => {
+            if (currentQuestionIndex < quizData.questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                showResultScreen();
+            }
+        });
+
+        backButton.addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            }
+        });
+
+        restartButton.addEventListener('click', restartQuiz);
+
+        // Initial load
+        window.onload = () => {
+            displayQuestion();
+        };
+
+        // LLM API call structure (not actually used for this local quiz data, but included as per instructions)
+        async function callLLMAPI(prompt) {
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+            const apiKey = ""; // If you want to use models other than gemini-2.5-flash-preview-05-20 or imagen-3.0-generate-002, provide an API key here. Otherwise, leave this as-is.
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            let retries = 0;
+            const maxRetries = 5;
+            let delay = 1000; // 1 second
+
+            while (retries < maxRetries) {
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (response.status === 429) { // Too Many Requests
+                        retries++;
+                        await new Promise(res => setTimeout(res, delay));
+                        delay *= 2; // Exponential backoff
+                        continue;
+                    }
+                    const result = await response.json();
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        return text;
+                    } else {
+                        console.error("LLM API response structure unexpected:", result);
+                        return null;
+                    }
+                } catch (error) {
+                    console.error("Error calling LLM API:", error);
+                    retries++;
+                    await new Promise(res => setTimeout(res, delay));
+                    delay *= 2;
+                }
+            }
+            console.error("Max retries reached for LLM API call.");
+            return null;
+        }
+
+    </script>
+</body>
+</html>
+QuizCPP.html
+Displaying QuizCPP.html.
