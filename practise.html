@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        h3{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    
+ <h3> Hello Diwash : </h3>
+ <button> <a href="sir.html"> Click me : </a></button>
+ <script>
+    let btn = document.querySelector("button")
+    btn.addEventListener("click",()=>{
+        let hd = document.querySelector("h3").style.color="Green"
+    })
+    btn.addEventListener("unclick",()=>{
+        let hd = document.querySelector("h3").style.color="black"
+
+    })
+ </script>
+</body>
+</html>
